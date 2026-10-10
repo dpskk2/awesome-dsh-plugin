@@ -219,6 +219,8 @@ jobs:
         with:
           path: docs
       - id: deployment
+        # Forks can build and upload artifacts without publishing the upstream site.
+        if: github.repository == 'awesome-dsh-plugin/awesome-dsh-plugin'
         uses: actions/deploy-pages@v4
         # The concurrency split above means a push build and the nightly can now
         # be in flight together, and Pages accepts one deployment at a time.
@@ -263,7 +265,7 @@ jobs:
       # in the runner's working copy and never committed, so the invariant at
       # the top of this file holds.
       - name: publish the catalog to npm
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.repository == 'awesome-dsh-plugin/awesome-dsh-plugin' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         # Trusted publishing (OIDC) — the id-token permission above is what
         # authorizes it, so there is no token to leak or rotate.
         run: |
@@ -276,7 +278,7 @@ jobs:
       # catalog tarball would multiply every consumer's daily download for
       # data most never request. See scripts/publish-updates.mjs.
       - name: publish the update notes to npm
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        if: github.repository == 'awesome-dsh-plugin/awesome-dsh-plugin' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
         run: |
           npm install -g npm@latest  # trusted publishing needs npm >= 11.5
           node scripts/publish-updates.mjs
