@@ -67,7 +67,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  fork-check:
+    name: Check fork
+    if: github.repository != 'awesome-dsh-plugin/awesome-dsh-plugin'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: node --test scripts/download-window.test.mjs
+
   build:
+    # Production site data and publishing belong to the upstream repository.
+    if: github.repository == 'awesome-dsh-plugin/awesome-dsh-plugin'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
