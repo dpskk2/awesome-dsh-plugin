@@ -31,6 +31,9 @@ concurrency:
 
 jobs:
   check:
+    # Only the upstream repository deploys this production site. Fork catalogs
+    # are independent and must not be compared against the upstream deployment.
+    if: github.repository == 'awesome-dsh-plugin/awesome-dsh-plugin'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
