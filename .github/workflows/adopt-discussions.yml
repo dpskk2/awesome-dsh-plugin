@@ -43,6 +43,8 @@ concurrency:
 
 jobs:
   adopt:
+    # Plugin comment discussions belong to upstream; forks may lack Plugins.
+    if: github.repository == 'awesome-dsh-plugin/awesome-dsh-plugin'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
